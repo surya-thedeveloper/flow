@@ -2,6 +2,10 @@
 
 A fluid, minimalist task and note-taking application designed around focus, momentum, and water-like fluid dynamics.
 
+🌐 **Live Demo**: [https://surya-thedeveloper.github.io/flow/](https://surya-thedeveloper.github.io/flow/)
+
+---
+
 ## ✨ Features
 
 - **Fluid Wave Progress Engine**: Real-time 60fps SVG fluid wave animations synchronized with task completion states.
@@ -49,6 +53,10 @@ npm run dev
 ```bash
 npm run build
 ```
+
+## 🌐 Deployment
+
+The project is configured for automated continuous deployment to GitHub Pages via GitHub Actions upon pushes to `main`.
 
 ## 📄 License
 
