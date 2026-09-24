@@ -1,0 +1,67 @@
+:root {
+  /* Midnight Dark Blue Theme */
+  --bg-app: #060912;
+  --bg-sidebar: #090e1d;
+  --bg-surface: #0e162e;
+  --bg-surface-hover: #131e3d;
+  --bg-input: #0b1226;
+  --bg-track: #101934;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-strike: #475569;
+
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(56, 189, 248, 0.18);
+  --border-glow: rgba(0, 242, 254, 0.4);
+
+  --neon-blue: #00f2fe;
+  --neon-cyan: #38bdf8;
+  --neon-gradient: linear-gradient(90deg, #00f2fe 0%, #2563eb 100%);
+  --neon-glow: 0 0 20px rgba(0, 242, 254, 0.55);
+  --neon-text-glow: 0 0 16px rgba(0, 242, 254, 0.45);
+
+  --font-family: 'Outfit', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-medium: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-progress: 1000ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: var(--font-family);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: 
+    radial-gradient(circle at 10% 15%, rgba(0, 242, 254, 0.04) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(37, 99, 235, 0.05) 0%, transparent 55%);
+}
+
+input, button, textarea {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}

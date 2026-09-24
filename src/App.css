@@ -1,0 +1,1136 @@
+/* ===================================================
+   APP ROOT & SPLIT LAYOUT (Independent Scroll Containers)
+   =================================================== */
+.flow-midnight-app {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  background-color: var(--bg-app);
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.app-split-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Persistent Flow Brand Header (Left-aligned at left: 24px in sidebar when open, centered in 48px strip when collapsed) */
+.persistent-flow-brand {
+  position: absolute;
+  top: 32px;
+  left: 24px;
+  width: auto;
+  transform: translateY(0);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  z-index: 35;
+  user-select: none;
+  pointer-events: none;
+  transition: top 0.48s cubic-bezier(0.25, 1, 0.5, 1),
+              left 0.48s cubic-bezier(0.25, 1, 0.5, 1),
+              transform 0.48s cubic-bezier(0.25, 1, 0.5, 1),
+              gap 0.48s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.persistent-flow-brand.collapsed {
+  top: 50%;
+  left: 0;
+  width: 48px;
+  transform: translateY(-50%);
+  flex-direction: column; /* Places logo at top, after 'w' of vertical Flow */
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.persistent-flow-brand.collapsed .modern-flow-logo {
+  transform: rotate(90deg);
+}
+
+.persistent-flow-brand.collapsed .big-flow-title {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 2.5px;
+}
+
+/* ===================================================
+   LEFT SIDEBAR (Independent Scroll & Smooth Collapse)
+   =================================================== */
+.sidebar-pane {
+  width: 290px;
+  min-width: 290px;
+  height: 100%;
+  max-height: 100vh;
+  background-color: var(--bg-sidebar);
+  border-right: none;
+  display: flex;
+  flex-direction: column;
+  padding: 92px 18px 24px;
+  gap: 16px;
+  box-sizing: border-box;
+  overflow: visible;
+  overscroll-behavior: contain;
+  flex-shrink: 0;
+  position: relative;
+  transition: margin-left 0.45s cubic-bezier(0.25, 1, 0.5, 1), background-color var(--transition-fast);
+  z-index: 20;
+}
+
+/* Sidebar Vertical Wavy Divider Line */
+.sidebar-vertical-wave-divider {
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 16px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 25;
+  transition: opacity 0.24s ease;
+}
+
+.sidebar-pane.collapsed {
+  margin-left: -290px;
+}
+
+.sidebar-pane.collapsed .sidebar-vertical-wave-divider {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Edge Strip Toggle Button at bottom end - fitted along wavy border contour */
+.sidebar-edge-toggle-strip {
+  position: absolute;
+  right: -16px;
+  bottom: 38px;
+  width: 22px;
+  height: 48px;
+  background: rgba(9, 14, 29, 0.96);
+  border: 1.5px solid rgba(56, 189, 248, 0.35);
+  border-left: none;
+  border-radius: 0 14px 14px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  z-index: 50;
+  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-edge-toggle-strip:hover {
+  width: 25px;
+  right: -19px;
+  color: var(--neon-cyan);
+  border-color: rgba(0, 242, 254, 0.55);
+  background-color: #0c1530;
+  box-shadow: 3px 0 16px rgba(0, 242, 254, 0.4);
+}
+
+.sidebar-edge-toggle-strip:active {
+  transform: scale(0.95);
+}
+
+.sidebar-top-section {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modern-flow-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(2px);
+  filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.7));
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Big Flow Title - strictly 34px in both expanded/collapsed states */
+.big-flow-title {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  color: var(--text-primary);
+  background: linear-gradient(135deg, #ffffff 30%, #7dd3fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-add-new-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.14), rgba(37, 99, 235, 0.22));
+  border: 1px solid rgba(0, 242, 254, 0.4);
+  color: var(--neon-blue);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  transition: all var(--transition-fast);
+}
+
+.sidebar-add-new-btn:hover {
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.25), rgba(37, 99, 235, 0.4));
+  box-shadow: 0 0 18px rgba(0, 242, 254, 0.45);
+  transform: translateY(-1px);
+}
+
+.sidebar-add-new-btn:active {
+  transform: translateY(0);
+}
+
+/* Sidebar List - independent scroll container with Left-Side Micro Scrollbar */
+.sidebar-items-list {
+  flex: 1 1 0%;
+  min-height: 0;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  direction: rtl; /* Moves scrollbar to left side */
+  padding-left: 14px; /* Generous breathing gap between left scrollbar and note tiles */
+  padding-right: 0;
+  padding-bottom: 8px;
+}
+
+.sidebar-items-list > * {
+  direction: ltr; /* Restores standard LTR note content layout */
+}
+
+.sidebar-items-list::-webkit-scrollbar {
+  width: 1.5px;
+}
+
+.sidebar-items-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-items-list::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.25);
+  border-radius: 9999px;
+}
+
+.sidebar-items-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 242, 254, 0.55);
+}
+
+/* Sidebar Bottom Fixed Slogan (Inside sidebar flex layout, never overlaps items) */
+.sidebar-bottom-slogan {
+  margin-top: auto;
+  padding: 16px 8px 4px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--bg-sidebar);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.sidebar-bottom-slogan span {
+  font-family: var(--font-family);
+  font-size: 16.5px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  font-style: normal;
+  color: var(--text-primary);
+  background: linear-gradient(135deg, #ffffff 30%, #7dd3fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.4));
+  opacity: 1;
+  user-select: none;
+  pointer-events: none;
+  line-height: 1;
+}
+
+/* Floating Slogan on Right Side Center when Sidebar is Collapsed */
+.persistent-flow-slogan.collapsed {
+  position: fixed;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  font-family: var(--font-family);
+  font-size: 16.5px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  font-style: normal;
+  color: var(--text-primary);
+  background: linear-gradient(135deg, #ffffff 30%, #7dd3fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.4));
+  opacity: 1;
+  user-select: none;
+  pointer-events: none;
+  z-index: 35;
+  transition: all 0.48s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.sidebar-empty-state {
+  padding: 32px 12px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-empty-create-btn {
+  color: var(--neon-cyan);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Sidebar note item: Title + Progress Bar Only */
+.sidebar-row-item {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-left: 2px solid transparent;
+  flex-shrink: 0;
+}
+
+.sidebar-row-item:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.sidebar-row-item.active {
+  background-color: rgba(0, 242, 254, 0.07);
+  border-left-color: var(--neon-blue);
+}
+
+.row-item-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-row-item.active .row-item-title {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.sidebar-item-progress {
+  width: 100%;
+}
+
+.sidebar-row-item.is-deleting-tile {
+  animation: sidebarTileDelete 260ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes sidebarTileDelete {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    max-height: 80px;
+  }
+  50% {
+    opacity: 0.3;
+    transform: translateX(-8px) scale(0.96);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-18px) scale(0.9);
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    border-left: none;
+  }
+}
+
+/* Compact Progress Bar (Little Wavy for Sidebar items) */
+.compact-progress-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.compact-progress-wave-box {
+  flex: 1;
+  height: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.compact-wave-svg {
+  width: 100%;
+  height: 10px;
+  display: block;
+}
+
+/* ===================================================
+   CENTER WORKSPACE (Independent Scroll)
+   =================================================== */
+.main-center-pane {
+  flex: 1;
+  height: 100%;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 80px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+
+.unboxed-note-workspace-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 260ms cubic-bezier(0.25, 1, 0.5, 1),
+              transform 260ms cubic-bezier(0.25, 1, 0.5, 1),
+              filter 260ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.unboxed-note-workspace-wrapper.is-deleting-flow-exit {
+  opacity: 0;
+  transform: translateY(-12px) scale(0.98);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.unboxed-note-workspace {
+  width: 100%;
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 24px 32px 60px;
+  box-sizing: border-box;
+}
+
+/* Title Header (32px font size) */
+.note-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.title-text-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.clean-title-heading {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  color: var(--text-primary);
+  cursor: pointer;
+  line-height: 1.25;
+  padding: 2px 0;
+  transition: opacity var(--transition-fast);
+}
+
+.clean-title-heading:hover {
+  opacity: 0.85;
+}
+
+.clean-title-input {
+  width: 100%;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--neon-cyan);
+  padding: 2px 0;
+  outline: none;
+}
+
+/* Screen-Fixed Bottom-Right Delete Button */
+.screen-fixed-delete-btn {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background-color: rgba(14, 22, 46, 0.85);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 50;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.screen-fixed-delete-btn:hover {
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.4);
+  background-color: rgba(239, 68, 68, 0.12);
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.35);
+  transform: scale(1.08);
+}
+
+.screen-fixed-delete-btn:active {
+  transform: scale(0.96);
+}
+
+/* ===================================================
+   STICKY TOP WAVE PROGRESS BAR (Full Span from Sidebar to Right Edge)
+   =================================================== */
+.top-wave-progress-sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 15;
+  background: linear-gradient(
+    180deg,
+    rgba(6, 9, 18, 0.96) 0%,
+    rgba(6, 9, 18, 0.88) 70%,
+    rgba(6, 9, 18, 0.4) 90%,
+    transparent 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 6px;
+  box-sizing: border-box;
+}
+
+.wave-canvas-wrapper {
+  width: 100%;
+  height: 72px;
+  position: relative;
+  overflow: hidden;
+}
+
+.wave-main-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.active-wave-fill-rect,
+.active-wave-fill-path {
+  /* Continuous mathematical fluid interpolation handled via RAF */
+}
+
+.water-shimmer-sweep-rect {
+  animation: waterShimmerSweep 4.5s infinite ease-in-out;
+  transform-origin: 0 0;
+}
+
+@keyframes waterShimmerSweep {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.85;
+  }
+  70% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Metrics Row below the wave: left side (start) done number + last flow, right side (end) percent */
+.top-wave-metrics-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 28px 8px;
+  box-sizing: border-box;
+}
+
+.wave-metric-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.wave-metric-done {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  line-height: 1.35;
+  letter-spacing: normal;
+}
+
+.wave-metric-last-flow {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-muted);
+  line-height: 1.35;
+  letter-spacing: normal;
+}
+
+.wave-metric-percent {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--neon-blue);
+  text-shadow: var(--neon-text-glow);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* Soft gradient blend at right end */
+.gradient-blend-edge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 28px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 242, 254, 0.2) 30%,
+    rgba(0, 242, 254, 0.6) 70%,
+    rgba(59, 130, 246, 0.9) 100%
+  );
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+/* Continuous shining animation */
+.neon-shimmer-sweep {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 25%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0.08) 75%,
+    transparent 100%
+  );
+  animation: neonShimmer 2.6s infinite ease-in-out;
+}
+
+@keyframes neonShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ===================================================
+   ACTIVE TASKS SCROLLING DISPLAY (To Do)
+   =================================================== */
+.active-tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.active-tasks-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.scroll-toggle-link {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--neon-cyan);
+  transition: opacity var(--transition-fast);
+}
+
+.scroll-toggle-link:hover {
+  opacity: 0.8;
+}
+
+/* Scrolling window */
+.scrolling-task-window {
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+}
+
+.animated-tasks-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+
+/* Clean Task Row with Smooth Pointer-Drag */
+.clean-task-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 6px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: transparent;
+  user-select: none;
+  position: relative;
+}
+
+.clean-task-row:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.clean-task-row.is-active-pointer-drag {
+  background-color: rgba(14, 24, 52, 0.98) !important;
+  border: 1px solid var(--neon-cyan) !important;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), 0 0 16px rgba(0, 242, 254, 0.45);
+  cursor: grabbing !important;
+  touch-action: none;
+}
+
+.task-drag-handle {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  cursor: grab;
+  padding: 4px;
+  opacity: 0.5;
+  touch-action: none;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.task-drag-handle:active {
+  cursor: grabbing;
+}
+
+.clean-task-row:hover .task-drag-handle {
+  opacity: 1;
+  color: var(--neon-cyan);
+}
+
+.clean-task-row.slide-in {
+  animation: slideInUp 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.clean-task-row.sliding-up-exit {
+  animation: slideUpExit 220ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.clean-task-row.task-deleting-flow-exit {
+  animation: taskDeleteExit 220ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes taskDeleteExit {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    max-height: 54px;
+  }
+  45% {
+    opacity: 0.35;
+    transform: translateX(12px) scale(0.98);
+    border-bottom-color: rgba(239, 68, 68, 0.35);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(24px) scale(0.94);
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    border-bottom-color: transparent;
+  }
+}
+
+@keyframes slideInUp {
+  0% {
+    transform: translateY(10px);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpExit {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-18px);
+    opacity: 0;
+  }
+}
+
+.clean-task-row.completed {
+  opacity: 0.55;
+}
+
+/* Checkbox */
+.clean-checkbox {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.checkbox-ring {
+  width: 19px;
+  height: 19px;
+  border-radius: 4px;
+  border: 1.5px solid #334155;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  transition: all var(--transition-fast);
+}
+
+.clean-checkbox:hover .checkbox-ring {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+.clean-checkbox.checked .checkbox-ring {
+  background: var(--neon-gradient);
+  border-color: var(--neon-blue);
+  color: #080c17;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.6);
+}
+
+.checkbox-svg {
+  transform: scale(0.6);
+  opacity: 0;
+  transition: transform 150ms ease, opacity 150ms ease;
+}
+
+.clean-checkbox.checked .checkbox-svg {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Task Text (16px font size) */
+.task-text-container {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-display-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: block;
+  word-break: break-word;
+  transition: color var(--transition-fast);
+}
+
+.clean-task-row.completed .task-display-text {
+  color: var(--text-strike);
+  text-decoration: line-through;
+}
+
+.task-clean-input {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--neon-cyan);
+  padding: 2px 0;
+  outline: none;
+}
+
+/* Actions */
+.task-hover-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.clean-task-row:hover .task-hover-actions {
+  opacity: 1;
+}
+
+.clean-icon-btn {
+  padding: 4px;
+  border-radius: 4px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.clean-icon-btn:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.clean-icon-btn.delete-action:hover {
+  color: #f87171;
+  background-color: rgba(239, 68, 68, 0.12);
+}
+
+/* Placeholder */
+.all-done-placeholder {
+  padding: 20px 0;
+  color: var(--text-muted);
+  font-size: 14.5px;
+}
+
+/* Inline Add Form */
+.clean-add-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
+  margin-top: 4px;
+  border-bottom: 1px dashed rgba(56, 189, 248, 0.25);
+  transition: border-color var(--transition-fast);
+}
+
+.clean-add-form:focus-within {
+  border-bottom: 1px solid var(--neon-cyan);
+}
+
+.add-icon-box {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+}
+
+.clean-add-input {
+  flex: 1;
+  font-size: 15px;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.clean-add-input::placeholder {
+  color: var(--text-muted);
+}
+
+.clean-add-submit {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--neon-gradient);
+  color: #080c17;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.clean-add-submit:hover {
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+}
+
+/* ===================================================
+   COMPLETED SECTION
+   =================================================== */
+.completed-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.completed-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  align-self: flex-start;
+  transition: color var(--transition-fast);
+}
+
+.completed-toggle-btn:hover {
+  color: var(--text-secondary);
+}
+
+.completed-tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Empty Center View */
+.empty-center-view {
+  margin: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
+}
+
+.empty-center-view h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.empty-create-btn {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: var(--neon-gradient);
+  color: #080c17;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.35);
+  transition: all var(--transition-fast);
+}
+
+.empty-create-btn:hover {
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Sleek subtle scrollbars */
+.sidebar-items-list::-webkit-scrollbar,
+.main-center-pane::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar-items-list::-webkit-scrollbar-track,
+.main-center-pane::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-items-list::-webkit-scrollbar-thumb,
+.main-center-pane::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
+
+.sidebar-items-list::-webkit-scrollbar-thumb:hover,
+.main-center-pane::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 242, 254, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .flow-midnight-app {
+    height: auto;
+    overflow-y: auto;
+  }
+
+  .app-split-layout {
+    flex-direction: column;
+    height: auto;
+    overflow-y: visible;
+  }
+
+  .sidebar-pane {
+    width: 100%;
+    min-width: unset;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 20px 16px;
+  }
+
+  .sidebar-pane.collapsed {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .main-center-pane {
+    height: auto;
+    padding: 24px 16px 60px;
+  }
+
+  .clean-title-heading,
+  .clean-title-input {
+    font-size: 24px;
+  }
+}
