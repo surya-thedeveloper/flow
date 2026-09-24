@@ -92,15 +92,15 @@ export function App() {
             />
           ) : (
             <div className="empty-center-view">
-              <h2>No Note Selected</h2>
-              <p>Select a note from the left sidebar or create a new one.</p>
+              <h2>No Selection</h2>
+              <p>Select from the sidebar or add new.</p>
               <button
                 type="button"
                 className="empty-create-btn"
                 onClick={handleCreateNewNote}
               >
                 <Plus size={16} />
-                <span>Create Note</span>
+                <span>Add New</span>
               </button>
             </div>
           )}
