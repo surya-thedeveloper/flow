@@ -24,7 +24,9 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({
   const [deletingTaskId, setDeletingTaskId] = useState<string | null>(null);
   const [isDeletingSelf, setIsDeletingSelf] = useState(false);
   const [showAllActive, setShowAllActive] = useState(false);
+  const [isAddingActive, setIsAddingActive] = useState(false);
   const [showCompleted, setShowCompleted] = useState(false);
+  const addFormRef = useRef<HTMLFormElement>(null);
 
   // Smooth pointer drag reordering state
   const [draggingIdx, setDraggingIdx] = useState<number | null>(null);
@@ -38,9 +40,10 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({
   const totalCount = note.tasks.length;
   const completedCount = completedTasks.length;
 
-  // Show 2 unchecked items at a time by default
+  // Show all items while adding/focused, otherwise 2 items mode
   const ACTIVE_LIMIT = 2;
-  const displayedActiveTasks = showAllActive
+  const isFullyShowing = showAllActive || isAddingActive;
+  const displayedActiveTasks = isFullyShowing
     ? uncheckedTasks
     : uncheckedTasks.slice(0, ACTIVE_LIMIT);
 
@@ -287,14 +290,14 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({
             <button
               type="button"
               className="scroll-toggle-link"
-              onClick={() => setShowAllActive(!showAllActive)}
+              onClick={() => setShowAllActive(!isFullyShowing)}
             >
-              {showAllActive ? 'Show less' : 'Show more'}
+              {isFullyShowing ? 'Show less' : 'Show more'}
             </button>
           )}
         </div>
 
-        {/* 2-Item Scrolling Display Window */}
+        {/* 2-Item Scrolling Display Window / Fully Expanded Window */}
         <div className="scrolling-task-window">
           {uncheckedTasks.length === 0 ? (
             <div className="all-done-placeholder">
@@ -314,7 +317,7 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({
                     index={idx}
                     isExiting={exitingTaskId === task.id}
                     isDeleting={deletingTaskId === task.id}
-                    isDraggable={showAllActive}
+                    isDraggable={isFullyShowing}
                     isDragging={draggingIdx === idx}
                     translateY={getItemTranslateY(idx)}
                     onToggle={handleToggleTask}
@@ -328,8 +331,18 @@ export const NoteDetail: React.FC<NoteDetailProps> = ({
           )}
         </div>
 
-        {/* Inline Add Task Input */}
-        <form className="clean-add-form" onSubmit={handleAddTask}>
+        {/* Inline Add Task Input - Expands task list while active */}
+        <form
+          ref={addFormRef}
+          className="clean-add-form"
+          onSubmit={handleAddTask}
+          onFocus={() => setIsAddingActive(true)}
+          onBlur={(e) => {
+            if (!addFormRef.current?.contains(e.relatedTarget as Node)) {
+              setIsAddingActive(false);
+            }
+          }}
+        >
           <div className="add-icon-box">
             <Plus size={15} />
           </div>
