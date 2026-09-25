@@ -148,7 +148,15 @@ export const NoteList: React.FC<NoteListProps> = ({
                       className={`sidebar-row-item ${isSelected ? 'active' : ''} ${
                         isDeleting ? 'is-deleting-tile' : ''
                       }`}
-                      onClick={() => !isDeleting && onSelectNote(note.id)}
+                      onClick={() => {
+                        if (!isDeleting) {
+                          onSelectNote(note.id);
+                          // Auto-close sidebar drawer on mobile
+                          if (window.innerWidth <= 768 && !isCollapsed) {
+                            onToggleCollapse();
+                          }
+                        }
+                      }}
                       role="button"
                       tabIndex={0}
                       onKeyDown={(e) => {

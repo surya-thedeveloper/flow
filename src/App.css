@@ -1097,40 +1097,453 @@
   background: rgba(0, 242, 254, 0.4);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .flow-midnight-app {
-    height: auto;
-    overflow-y: auto;
-  }
-
-  .app-split-layout {
-    flex-direction: column;
-    height: auto;
-    overflow-y: visible;
-  }
-
+/* ===================================================
+   RESPONSIVE — TABLET (769px – 1024px)
+   =================================================== */
+@media (max-width: 1024px) and (min-width: 769px) {
   .sidebar-pane {
-    width: 100%;
-    min-width: unset;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--border-subtle);
-    padding: 20px 16px;
+    width: 240px;
+    min-width: 240px;
+    padding: 88px 14px 20px;
   }
 
   .sidebar-pane.collapsed {
-    width: 100%;
-    padding: 16px;
+    margin-left: -240px;
   }
 
+  .unboxed-note-workspace {
+    max-width: 520px;
+    padding: 20px 24px 56px;
+  }
+
+  .wave-canvas-wrapper {
+    height: 60px;
+  }
+
+  .top-wave-metrics-row {
+    padding: 5px 20px 6px;
+  }
+
+  .persistent-flow-brand {
+    top: 28px;
+    left: 18px;
+  }
+
+  .big-flow-title {
+    font-size: 28px;
+  }
+
+  .modern-flow-logo svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* ===================================================
+   RESPONSIVE — MOBILE (≤768px)  
+   Sidebar becomes full-screen overlay drawer.
+   Main workspace takes full width.
+   =================================================== */
+@media (max-width: 768px) {
+  /* Root stays fixed fullscreen */
+  .flow-midnight-app {
+    height: 100vh;
+    height: 100dvh; /* dynamic viewport height for mobile browsers */
+    width: 100vw;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+  .app-split-layout {
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* --- Sidebar: Full-screen overlay drawer --- */
+  .sidebar-pane {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
+    z-index: 100;
+    padding: 88px 20px 24px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    background-color: var(--bg-sidebar);
+    border-right: none;
+    transform: translateX(0);
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                visibility 0s linear 0s;
+    visibility: visible;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .sidebar-pane.collapsed {
+    transform: translateX(-100%);
+    margin-left: 0; /* Override desktop negative margin */
+    visibility: hidden;
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+                visibility 0s linear 0.35s;
+  }
+
+  /* Hide the wavy divider on mobile */
+  .sidebar-vertical-wave-divider {
+    display: none;
+  }
+
+  /* Reposition the edge toggle for mobile: fixed top-left hamburger-style */
+  .sidebar-edge-toggle-strip {
+    position: fixed;
+    top: 16px;
+    top: calc(16px + env(safe-area-inset-top, 0px));
+    left: 12px;
+    right: auto;
+    bottom: auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(56, 189, 248, 0.3);
+    border-left: 1.5px solid rgba(56, 189, 248, 0.3);
+    z-index: 110;
+    background: rgba(9, 14, 29, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .sidebar-edge-toggle-strip:hover {
+    width: 40px;
+    right: auto;
+  }
+
+  /* Brand header repositioned for mobile */
+  .persistent-flow-brand {
+    top: 16px;
+    top: calc(16px + env(safe-area-inset-top, 0px));
+    left: 60px;
+    gap: 8px;
+    z-index: 115;
+  }
+
+  .persistent-flow-brand.collapsed {
+    top: 16px;
+    top: calc(16px + env(safe-area-inset-top, 0px));
+    left: 60px;
+    width: auto;
+    transform: none;
+    flex-direction: row;
+    writing-mode: horizontal-tb;
+  }
+
+  .persistent-flow-brand.collapsed .modern-flow-logo {
+    transform: none;
+  }
+
+  .persistent-flow-brand.collapsed .big-flow-title {
+    writing-mode: horizontal-tb;
+    transform: none;
+    letter-spacing: -0.8px;
+  }
+
+  .big-flow-title {
+    font-size: 26px;
+  }
+
+  .modern-flow-logo svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  /* Hide collapsed vertical slogan on mobile */
+  .persistent-flow-slogan.collapsed {
+    display: none;
+  }
+
+  /* Sidebar add button */
+  .sidebar-add-new-btn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  /* Sidebar items take full width, increase touch targets */
+  .sidebar-items-list {
+    direction: ltr;
+    padding-left: 0;
+    gap: 4px;
+  }
+
+  .sidebar-row-item {
+    padding: 14px 14px;
+    border-radius: var(--radius-md);
+    min-height: 44px;
+  }
+
+  .row-item-title {
+    font-size: 15px;
+  }
+
+  /* --- Main Center Pane --- */
   .main-center-pane {
-    height: auto;
-    padding: 24px 16px 60px;
+    flex: 1;
+    height: 100%;
+    max-height: 100vh;
+    max-height: 100dvh;
+    padding: 0 0 80px;
+    padding-top: calc(0px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .unboxed-note-workspace {
+    max-width: 100%;
+    padding: 16px 18px 60px;
+  }
+
+  /* Title */
+  .clean-title-heading {
+    font-size: 24px;
+    letter-spacing: -0.4px;
+  }
+
+  .clean-title-input {
+    font-size: 24px;
+  }
+
+  /* Wave progress bar shrinks */
+  .wave-canvas-wrapper {
+    height: 52px;
+  }
+
+  .top-wave-metrics-row {
+    padding: 4px 18px 6px;
+  }
+
+  .wave-metric-done {
+    font-size: 12px;
+  }
+
+  .wave-metric-last-flow {
+    font-size: 11px;
+  }
+
+  .wave-metric-percent {
+    font-size: 17px;
+  }
+
+  /* Task rows: larger touch targets */
+  .clean-task-row {
+    padding: 14px 8px;
+    gap: 10px;
+    min-height: 48px;
+  }
+
+  /* Make hover-only actions always visible on touch devices */
+  .task-hover-actions {
+    opacity: 1;
+  }
+
+  .task-display-text {
+    font-size: 15px;
+  }
+
+  .task-clean-input {
+    font-size: 15px;
+  }
+
+  /* Checkbox bigger for touch */
+  .checkbox-ring {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+  }
+
+  /* Add form */
+  .clean-add-form {
+    padding: 12px 6px;
+  }
+
+  .clean-add-input {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+
+  /* Delete button: larger tap target, safe area aware */
+  .screen-fixed-delete-btn {
+    bottom: 20px;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    right: 20px;
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Empty state */
+  .empty-center-view {
+    padding: 0 20px;
+  }
+
+  .empty-center-view h2 {
+    font-size: 18px;
+  }
+
+  .empty-create-btn {
+    padding: 11px 20px;
+    font-size: 14px;
+  }
+
+  /* Section labels */
+  .section-label {
+    font-size: 12px;
+  }
+
+  .scroll-toggle-link {
+    font-size: 12px;
+  }
+
+  .completed-toggle-btn {
+    font-size: 12px;
+  }
+}
+
+/* ===================================================
+   RESPONSIVE — SMALL MOBILE (≤400px)
+   =================================================== */
+@media (max-width: 400px) {
+  .persistent-flow-brand {
+    left: 54px;
+    gap: 6px;
+  }
+
+  .persistent-flow-brand.collapsed {
+    left: 54px;
+  }
+
+  .big-flow-title {
+    font-size: 22px;
+  }
+
+  .modern-flow-logo svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .sidebar-pane {
+    padding: 84px 14px 20px;
+  }
+
+  .unboxed-note-workspace {
+    padding: 12px 14px 56px;
   }
 
   .clean-title-heading,
   .clean-title-input {
-    font-size: 24px;
+    font-size: 21px;
+  }
+
+  .wave-canvas-wrapper {
+    height: 44px;
+  }
+
+  .top-wave-metrics-row {
+    padding: 3px 14px 5px;
+  }
+}
+
+/* ===================================================
+   TOUCH DEVICE OVERHAUL
+   =================================================== */
+@media (hover: none) and (pointer: coarse) {
+  /* Always show task action buttons on touch */
+  .task-hover-actions {
+    opacity: 1;
+  }
+
+  /* Enlarge drag handles for finger use */
+  .task-drag-handle {
+    padding: 8px;
+    opacity: 0.7;
+  }
+
+  /* Disable hover effects that cause sticky states on touch */
+  .sidebar-row-item:hover {
+    background-color: transparent;
+  }
+
+  .sidebar-row-item.active:hover {
+    background-color: rgba(0, 242, 254, 0.07);
+  }
+
+  .clean-task-row:hover {
+    background-color: transparent;
+  }
+
+  /* Larger icon buttons for touch */
+  .clean-icon-btn {
+    padding: 8px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+}
+
+/* ===================================================
+   LANDSCAPE MOBILE (short viewport)
+   =================================================== */
+@media (max-height: 500px) and (max-width: 768px) {
+  .wave-canvas-wrapper {
+    height: 36px;
+  }
+
+  .top-wave-metrics-row {
+    padding: 2px 14px 4px;
+  }
+
+  .main-center-pane {
+    padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ===================================================
+   PRINT STYLES
+   =================================================== */
+@media print {
+  .flow-midnight-app {
+    position: static;
+    height: auto;
+    overflow: visible;
+    background: white;
+  }
+
+  .sidebar-pane,
+  .sidebar-edge-toggle-strip,
+  .persistent-flow-brand,
+  .persistent-flow-slogan,
+  .screen-fixed-delete-btn,
+  .top-wave-progress-sticky {
+    display: none !important;
+  }
+
+  .main-center-pane {
+    height: auto;
+    overflow: visible;
+    padding: 20px;
+  }
+
+  .clean-title-heading {
+    color: #000;
+    -webkit-text-fill-color: #000;
+  }
+
+  .task-display-text {
+    color: #333;
   }
 }

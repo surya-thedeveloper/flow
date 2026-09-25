@@ -16,7 +16,7 @@ export function App() {
     }
     return initial.length > 0 ? initial[0].id : null;
   });
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => window.innerWidth <= 768);
 
   // Always force dark mode midnight theme
   useEffect(() => {
